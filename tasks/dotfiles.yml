@@ -1,0 +1,6 @@
+- name: Cloning .dotfiles
+  shell: chezmoi init git@github.com:ximenean/dotfiles.git
+  tags:
+    - install
+    - dotfiles
+    - stow

@@ -1,0 +1,8 @@
+  - name: Show file extensions
+    shell: defaults write NSGlobalDomain AppleShowAllExtensions -bool true
+
+  - name: Show hidden files
+    shell: defaults write com.apple.Finder AppleShowAllFiles -bool true
+
+  - name: Kill finder
+    shell: killall Finder

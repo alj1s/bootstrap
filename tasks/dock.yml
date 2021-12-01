@@ -1,0 +1,14 @@
+  - name: Configure dock tilesize
+    shell: defaults write com.apple.dock tilesize -integer 32
+
+  - name: Configure dock magnification size
+    shell: defaults write com.apple.dock largesize -int 128
+
+  - name: Configure dock magnification
+    shell: defaults write com.apple.dock magnification -bool true
+
+  - name: Autohide dock
+    shell: defaults write com.apple.dock autohide -bool true
+
+  - name: Restart dock
+    shell: killall Dock

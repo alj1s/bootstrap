@@ -1,0 +1,81 @@
+---
+- hosts: localhost
+
+  vars:
+    homebrew_installed_packages:
+      - bat
+      - chezmoi
+      - exa
+      - fd
+      - git
+      - navi
+      - neovim
+      - nvm
+      - ripgrep
+      - romkatv/powerlevel10k/powerlevel10k
+      - koekeishiya/formulae/skhd
+      - tmux
+      - tree
+      - cjbassi/ytop/ytop
+      - z
+
+    homebrew_cask_apps:
+      - brave-browser
+      - figma
+      - google-chrome
+      - homebrew/cask-fonts/font-jetbrains-mono
+      - iterm2
+      - karabiner-elements
+      - kitty
+      - obsidian
+      - raycast
+      - ubersicht
+
+    dockitems_remove:
+      - 'App Store'
+      - Calendar
+      - Contacts
+      - FaceTime
+      - Launchpad
+      - Mail
+      - Maps
+      - Music
+      - Messages
+      - News
+      - Notes
+      - Photos
+      - Podcasts
+      - Safari
+      - 'System Preferences'
+      - TV
+
+    dockitems_persist: []
+
+    source_key: "./.ssh/id_rsa"
+    dest_key: "{{ lookup('env', 'HOME') }}/.ssh/id_rsa"
+
+  roles:
+    - role: geerlingguy.mac.homebrew
+    - role: geerlingguy.mac.dock
+
+  tasks:
+    - name: Install Oh My ZSH
+      shell: sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+      args:
+        creates: "/Users/{{ lookup('env', 'USER') }}/.oh-my-zsh"
+
+    - include: tasks/dock.yml
+    - include: tasks/finder.yml
+    - include: tasks/git.yml
+    - include: tasks/nvim.yml
+    - include: tasks/ssh.yml
+
+    - name: Set screenshot location
+      shell: mkdir ~/Screenshots && defaults write com.apple.screencapture location -string "~/Screenshots"; killall SystemUIServer
+
+    - name: Simple-bar for ubersicht
+      ansible.builtin.git:
+        repo: "git@github.com:Jean-Tinland/simple-bar"
+        dest: "/Users/{{ lookup('env', 'USER') }}/Library/Application Support/Übersicht/widgets/simple-bar"
+
+

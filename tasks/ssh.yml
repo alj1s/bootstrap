@@ -1,0 +1,25 @@
+- name: Ensure .ssh directory exists.
+  file:
+    dest: "{{ dest_key | dirname }}"
+    mode: 0700
+    state: directory
+- name: Install ssh key
+  copy:
+    src: "{{ source_key }}"
+    dest: "{{ dest_key }}"
+    mode: 0600
+- name: Install ssh key public
+  copy:
+    src: "{{ source_key }}.pub"
+    dest: "{{ dest_key }}.pub"
+    mode: 0644
+- name: Install SSH identity
+  shell: ssh-add --apple-use-keychain {{ dest_key }}
+- name: ensure github.com is a known host
+  lineinfile:
+    dest: "{{ lookup('env', 'HOME') }}/.ssh/known_hosts"
+    create: yes
+    state: present
+    line: "{{ lookup('pipe', 'ssh-keyscan -t rsa github.com') }}"
+    regexp: "^github\\.com"
+

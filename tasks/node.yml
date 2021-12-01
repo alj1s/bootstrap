@@ -1,0 +1,4 @@
+- name: Install volta
+  shell: curl https://get.volta.sh | bash && source ~/.zshrc
+- name: Install node
+  shell: volta install node
